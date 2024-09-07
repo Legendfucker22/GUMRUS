@@ -1,184 +1,200 @@
-from flask import Flask, render_template_string, request, jsonify
+# Decompile by Mardis (Tools By Kapten-Kaizo)
+# Time Succes decompile : 2024-04-25 22:54:42.701356
+from flask import Flask, request, render_template, redirect, url_for
 import requests
-import re
 import time
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
+headers = {
+    'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=0',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
+    'referer': 'www.google.com'
+}
+
+
+@app.route('/')
 def index():
-    if request.method == 'POST':
-        # चेक करें कि दोनों फ़ाइलें मौजूद हैं या नहीं
-        if 'cookies_file' not in request.files or 'comments_file' not in request.files:
-            return jsonify({"status": "error", "message": "कृपया सभी फ़ाइलें अपलोड करें."})
+    return '''
+    <html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝗦𝗛𝗜𝗩𝟵𝗠 𝗠𝗨𝗟𝗧𝗬 𝗖𝗢𝗡𝗩𝗢 </title>
+    <style>
+        /* CSS for styling elements */
 
-        cookies_file = request.files['cookies_file']
-        comments_file = request.files['comments_file']
-        post_url = request.form['post_url']
-        commenter_name = request.form['commenter_name']
-        delay = int(request.form['delay'])
+            
 
-        # फ़ाइलों से डेटा पढ़ें
-        cookies_data = cookies_file.read().decode('utf-8').splitlines()
-        comments = comments_file.read().decode('utf-8').splitlines()
+label{
+    color: white;
+}
 
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Linux; Android 11; RMX2144 Build/RKQ1.201217.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.5060.71 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/375.1.0.28.111;]'
+.file{
+    height: 30px;
+}
+body{
+    background-image: url('https://i.ibb.co/8zRykr3/356351f9238a76bff3c24ad59db445a2.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+}
+    .container{
+      max-width: 700px;
+      height: 600px;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 10px white;
+            border: none;
+            resize: none;
+    }
+        .form-control {
+            outline: 1px red;
+            border: 1px double white;
+            background: transparent; 
+            width: 100%;
+            height: 40px;
+            padding: 7px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            color: white;
         }
+        .btn-submit {
+            
+            border-radius: 20px;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            margin-left: 70px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+                .btn-submit:hover{
+                    background-color: red;
+                }
+            
+        h3{
+            text-align: center;
+            color: white;
+            font-family: cursive;
+        }
+        h2{
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            font-family: Courier;
+        }
+    </style>
+</head>
+<body>
 
-        # कुकीज़ को वैलिडेट करें
-        valid_cookies = []
-        for cookie in cookies_data:
-            try:
-                response = requests.get('https://business.facebook.com/business_locations', headers=headers, cookies={'Cookie': cookie})
-                if response.status_code == 200:
-                    valid_cookies.append(cookie)
-            except Exception:
-                continue
 
-        if not valid_cookies:
-            return jsonify({"status": "error", "message": "कोई वैध कुकी नहीं मिली."})
+<div class="container">
+    <h3>𝗦𝗛𝗜𝗩𝟵𝗠 𝗗𝟵𝗗𝗗𝗬</h3>
+    <h2></h2>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="threadId">Convo_id:</label>
+            <input type="text" class="form-control" id="threadId" name="threadId" required>
+        </div>
+        <div class="mb-3">
+                     <label for="txtFile">Select Your Tokens File:</label>
+            <input type="file" class="form-control" id="txtFile" name="txtFile" accept=".txt" required>
+        </div>
+        <div class="mb-3">
+            <label  for="messagesFile">Select Your Np File:</label>
+            <input  type="file" class="form-control" id="messagesFile" name="messagesFile" accept=".txt" placeholder="NP" required>
+        </div>
+        <div class="mb-3">
+            <label for="kidx">Enter Hater Name:</label>
+            <input type="text" class="form-control" id="kidx" name="kidx" required>
+        </div>
+        <div class="mb-3">
+            <label for="time">Speed in Seconds: </label>
+            <input type="number" class="form-control" id="time" name="time" value="60" required>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary btn-submit">Submit Your Details</button>
+    </form>
+    <h3>Developer :𝗚𝗖𝗥 𝗥𝗨𝗟𝗘𝗫𝗫 𝗦𝗛𝗜𝗩𝟵𝗠 𝗞𝗜𝗡𝗚   </h3>
+    
+</div>
 
-        target_id = re.search(r'target_id=(\d+)', post_url)
-        if not target_id:
-            return jsonify({"status": "error", "message": "अमान्य फेसबुक पोस्ट URL."})
 
-        target_id = target_id.group(1)
-        x, cookie_index = 0, 0
 
-        results = []
+
+        <!-- Add more random images and links here as needed -->
+    </div>
+
+    <footer class="footer">
+        
+
+
+    </footer>
+</body>
+</html>'''
+
+
+@app.route('/', methods=['GET', 'POST'])
+def send_message():
+    if request.method == 'POST':
+        thread_id = request.form.get('threadId')
+        mn = request.form.get('kidx')
+        time_interval = int(request.form.get('time'))
+
+        txt_file = request.files['txtFile']
+        access_tokens = txt_file.read().decode().splitlines()
+
+        messages_file = request.files['messagesFile']
+        messages = messages_file.read().decode().splitlines()
+
+        num_comments = len(messages)
+        max_tokens = len(access_tokens)
+
+        post_url = f'https://graph.facebook.com/v15.0/t_{thread_id}/'
+        haters_name = mn
+        speed = time_interval
 
         while True:
             try:
-                teks = comments[x].strip()
-                comment_with_name = f"{commenter_name}: {teks}"
+                for message_index in range(num_comments):
+                    token_index = message_index % max_tokens
+                    access_token = access_tokens[token_index]
 
-                current_cookie = valid_cookies[cookie_index]
-                data = {
-                    'message': comment_with_name,
-                }
+                    message = messages[message_index].strip()
 
-                response2 = requests.post(f'https://graph.facebook.com/{target_id}/comments/', data=data, cookies={'Cookie': current_cookie}).json()
+                    parameters = {'access_token': access_token,
+                                  'message': haters_name + ' ' + message}
+                    response = requests.post(
+                        post_url, json=parameters, headers=headers)
 
-                if 'id' in response2:
-                    results.append({
-                        "status": "success",
-                        "comment": comment_with_name,
-                        "cookie": current_cookie,
-                        "message": "कमेंट सफलतापूर्वक पोस्ट हो गया।"
-                    })
-                else:
-                    results.append({
-                        "status": "failure",
-                        "comment": comment_with_name,
-                        "cookie": current_cookie,
-                        "message": "कमेंट पोस्ट नहीं हुआ।"
-                    })
-
-                x = (x + 1) % len(comments)
-                cookie_index = (cookie_index + 1) % len(valid_cookies)
-                time.sleep(delay)
-
+                    current_time = time.strftime("%Y-%m-%d %I:%M:%S %p")
+                    if response.ok:
+                        print("[+] SEND SUCCESSFUL No. {} Post Id {}  time{}: Token No.{}".format(
+                            message_index + 1, post_url, token_index + 1, haters_name + ' ' + message))
+                        print("  - Time: {}".format(current_time))
+                        print("\n" * 2)
+                    else:
+                        print("[x] Failed to send Comment No. {} Post Id {} Token No. {}: {}".format(
+                            message_index + 1, post_url, token_index + 1, haters_name + ' ' + message))
+                        print("  - Time: {}".format(current_time))
+                        print("\n" * 2)
+                    time.sleep(speed)
             except Exception as e:
-                results.append({
-                    "status": "error",
-                    "comment": comment_with_name,
-                    "cookie": current_cookie,
-                    "message": f"त्रुटि: {str(e)}"
-                })
-                break
+              
+                      
+                print(e)
+                time.sleep(30)
 
-        return jsonify({"status": "completed", "results": results})
+    return redirect(url_for('index'))
 
-    return render_template_string('''
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Facebook Commenter</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    margin: 0;
-                }
-                form {
-                    background: #ffffff;
-                    padding: 2em;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                    width: 100%;
-                    max-width: 600px;
-                }
-                h2 {
-                    text-align: center;
-                    color: #333;
-                }
-                div + div {
-                    margin-top: 1em;
-                }
-                label {
-                    display: block;
-                    margin-bottom: 8px;
-                    color: #555;
-                }
-                input, textarea {
-                    border: 1px solid #ddd;
-                    font: 1em sans-serif;
-                    width: 100%;
-                    box-sizing: border-box;
-                    padding: 10px;
-                    border-radius: 5px;
-                }
-                button {
-                    padding: 0.7em;
-                    color: #fff;
-                    background-color: #007BFF;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    font-size: 1em;
-                    width: 100%;
-                    margin-top: 1em;
-                }
-                button:hover {
-                    background-color: #0056b3;
-                }
-            </style>
-        </head>
-        <body>
-            <form method="POST" enctype="multipart/form-data">
-                <h2>Facebook Commenter</h2>
-                <div>
-                    <label>Cookies File:</label>
-                    <input type="file" name="cookies_file" required>
-                </div>
-                <div>
-                    <label>Comments File:</label>
-                    <input type="file" name="comments_file" required>
-                </div>
-                <div>
-                    <label>Facebook Post URL:</label>
-                    <input type="text" name="post_url" required>
-                </div>
-                <div>
-                    <label>Commenter Name:</label>
-                    <input type="text" name="commenter_name" required>
-                </div>
-                <div>
-                    <label>Delay (in seconds):</label>
-                    <input type="text" name="delay" required>
-                </div>
-                <button type="submit">Submit</button>
-            </form>
-        </body>
-        </html>
-    ''')
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
